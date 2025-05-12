@@ -1,0 +1,23 @@
+timeout: '1200s'  # 10min
+
+steps:
+  # maven:3-eclipse-temurin-21. Pin sha for reproducible builds
+  - name: maven@sha256:e895a7e85a1acb128d3670fa3ee45f2a9f07836b28364d19a4ab2916f9dd2e14
+    id: Maven_Build_Service
+    args: ['mvn', 'clean', 'install', '-B', '-X']
+  - name: gcr.io/cloud-builders/docker
+    id: Build_Docker_Image
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        docker build -t ${_TAG} --build-arg BUILD_DATE=$$(date +%s) .
+
+dependencies:
+  - gitSource:
+      repository:
+        url: "${_REPOSITORY_URL}"
+      revision: "${_REF_SHA}" 
+      destPath: "."
+images:
+  ['${_TAG}']
