@@ -16,8 +16,8 @@ steps:
 dependencies:
   - gitSource:
       repository:
-        url: "${_REPOSITORY_URL}"
-      revision: "${_REF_SHA}" 
+        url: "${_LOUHI_REPOSITORY_URL}"
+      revision: "${_LOUHI_REF_SHA}" 
       destPath: "."
 images:
   ['${_TAG}']
